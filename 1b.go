@@ -6,6 +6,7 @@ import (
     "log"
 	"os"
 	"strconv"
+	"sort"
 )
 
 const inputFile = "./inputs/1a.input"
@@ -23,17 +24,14 @@ func main() {
 
 
 	runningCalorieSum := 0
-	largestCalorieSum := 0 
+	var largestCalorieArr []int
 
 	for fileScanner.Scan() {
 		lineText := fileScanner.Text()
 
 		
 		if lineText == "" {
-			if runningCalorieSum > largestCalorieSum {
-				largestCalorieSum = runningCalorieSum
-			}
-
+			largestCalorieArr = append(largestCalorieArr, runningCalorieSum)
 			runningCalorieSum = 0 
 		} else {
 			currentCalorie, err := strconv.Atoi(lineText)
@@ -52,5 +50,9 @@ func main() {
         log.Fatal(err)
     }
 
-	fmt.Println("largest calorie sum", largestCalorieSum)
+	// this was annoying to figure out (reverse sort)
+	sort.Sort(sort.Reverse(sort.IntSlice(largestCalorieArr)))
+
+	topThreeCalorieSum := largestCalorieArr[0] + largestCalorieArr[1] + largestCalorieArr[2] 
+	fmt.Println("sum of the top three:", topThreeCalorieSum)
 }
