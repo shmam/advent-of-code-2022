@@ -2,41 +2,27 @@ package main
 
 import (
 	"fmt"
-    "bufio"
-    "log"
-	"os"
+	"log"
 	"strconv"
 )
 
-const inputFile = "./inputs/1a.input"
-
 func main() {
-	fileContent, err := os.Open(inputFile)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer fileContent.Close() // will close at the end of the file 
-
-	fileScanner := bufio.NewScanner(fileContent)
-
+	fileContent := readFileReturnArray("./inputs/1a.input")
 
 	runningCalorieSum := 0
-	largestCalorieSum := 0 
+	largestCalorieSum := 0
 
-	for fileScanner.Scan() {
-		lineText := fileScanner.Text()
+	for _, line := range fileContent {
 
-		
-		if lineText == "" {
+		if line == "" {
 			if runningCalorieSum > largestCalorieSum {
 				largestCalorieSum = runningCalorieSum
 			}
 
-			runningCalorieSum = 0 
+			runningCalorieSum = 0
 		} else {
-			currentCalorie, err := strconv.Atoi(lineText)
+			currentCalorie, err := strconv.Atoi(line)
 
 			// if there was an issue converting stirng to int
 			if err != nil {
@@ -46,11 +32,6 @@ func main() {
 			runningCalorieSum += currentCalorie
 		}
 	}
-
-	// if there was an error in the scanner, log error
-	if err := fileScanner.Err(); err != nil {
-        log.Fatal(err)
-    }
 
 	fmt.Println("largest calorie sum", largestCalorieSum)
 }
